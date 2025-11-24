@@ -14,6 +14,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/pricing-page/pricing-page')
   },
   {
+    path: 'pokemons',
+    loadComponent: () => import('./pages/pokemons-page/pokemons-page')
+  },
+  {
     path: '**',
     redirectTo: () => 'about'
   }
