@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {Meta, Title} from '@angular/platform-browser';
+import {MetadataService} from '../../shared/services/metadata.service';
 
 @Component({
   selector: 'contact-page',
@@ -8,14 +8,15 @@ import {Meta, Title} from '@angular/platform-browser';
   styleUrl: './contact-page.css',
 })
 export default class ContactPage implements OnInit{
-  private title = inject(Title)
-  private meta = inject(Meta)
+
+  private metadataService = inject(MetadataService)
 
   ngOnInit(): void {
-    this.title.setTitle('Contact Page')
-    this.meta.updateTag({name: 'description', content: 'Contact Page'})
-    this.meta.updateTag({name: 'og-title', content: 'Contact Page'})
-    this.meta.updateTag({name: 'keywords', content: 'Contact,Page'})
+    this.metadataService.setTitle('Contact Page')
+    this.metadataService.setMetadata([
+      {name: 'description', content: 'Contact Page'},
+      {name: 'og-title', content: 'Contact Page'},
+      {name: 'keywords', content: 'Contact,Page'}
+    ])
   }
-
 }
