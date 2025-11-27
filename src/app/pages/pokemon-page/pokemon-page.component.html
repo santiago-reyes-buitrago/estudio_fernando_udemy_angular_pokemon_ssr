@@ -1,0 +1,39 @@
+
+@if (pokemon()){
+
+  @let myPokemon = pokemon()!;
+
+  <section class="flex flex-col justify-center">
+    <div class="flex justify-center">
+      <h1 class="text-4xl font-bold capitalize my-5">
+        {{myPokemon.name}}
+      </h1>
+    </div>
+  </section>
+  <section class="flex flex-col justify-center items-center w-full">
+    <img [src]="myPokemon.sprites.other['official-artwork'].front_default"
+         [alt]="myPokemon.name" class="w-64 h-64"/>
+    @if (myPokemon.cries.latest) {
+      <audio controls class="my-10">
+        <source [src]="myPokemon.cries.latest" type="audio/wav">
+      </audio>
+    }
+  </section>
+  <section class="flex flex-col justify-center">
+    <h2 class="text-2xl font-bold mt-2">Habilidades</h2>
+    <div class="flex flex-wrap items-center">
+      @for (ability of myPokemon.abilities; track ability.ability.name) {
+        <span class="my-10">
+          {{ability.ability.name}}
+        </span>
+      }
+    </div>
+  </section>
+} @else {
+  <div class="flex justify-center">
+    <h1 class="text-4xl font-bold">Cargando.....</h1>
+  </div>
+}
+
+
+

@@ -1,7 +1,7 @@
 <h1 class="text-3xl">Listado de Pokemons</h1>
 <h2 class="text-xl">Pagina Actual: {{query()}}</h2>
 <hr class="my-2"/>
-@if (true) {
+@if (pokemons().length !== 0) {
   <pokemon-list [pokemons]="pokemons()"/>
 } @else {
   <pokemon-list-skeleton/>

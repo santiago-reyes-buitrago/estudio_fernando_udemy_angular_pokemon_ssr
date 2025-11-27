@@ -1,4 +1,4 @@
-import {ApplicationRef, Component, inject, OnDestroy, OnInit, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {MetadataService} from '../../shared/services/metadata.service';
 import {PokemonListComponent} from '../../pokemons/components/pokemon-list/pokemon-list.component';
 import {
@@ -18,6 +18,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
   ],
   templateUrl: './pokemons-page.html',
   styleUrl: './pokemons-page.css',
+  standalone: true
 })
 export default class PokemonsPage implements OnInit{
   private pokemonService = inject(PokemonsService)

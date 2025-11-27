@@ -9,6 +9,7 @@ import {Result} from '../../interfaces';
   ],
   templateUrl: './pokemon-list.component.html',
   styleUrl: './pokemon-list.component.css',
+  standalone: true
 })
 export class PokemonListComponent {
 
