@@ -13,7 +13,7 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'pokemons',
-    renderMode: Prerender
+    renderMode: Server
   },
   {
     path: '**',
