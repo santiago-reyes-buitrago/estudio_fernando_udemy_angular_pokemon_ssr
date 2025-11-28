@@ -1,14 +1,11 @@
-import {Component, computed, inject, input, signal} from '@angular/core';
+import {Component, computed, inject, input} from '@angular/core';
 import {Result} from '../../interfaces';
 import {PokemonsService} from '../../services/pokemons.service';
-import {AsyncPipe} from '@angular/common';
-import {map, tap} from 'rxjs';
 import {Router} from '@angular/router';
 
 @Component({
   selector: 'pokemon-card',
   imports: [
-    AsyncPipe
   ],
   templateUrl: './pokemon-card.component.html',
   styleUrl: './pokemon-card.component.css',
@@ -17,18 +14,15 @@ import {Router} from '@angular/router';
 export class PokemonCardComponent {
   private readonly pokemonService = inject(PokemonsService)
   private readonly router = inject(Router)
-  id = signal<number|null>(null);
   pokemon = input.required<Result>();
 
-  imagePokemon = computed(() => this.pokemonService.getPokemon(this.pokemon().url).pipe(
-    tap(response => this.id.set(response!.id)),
-    map(response => response!.sprites.front_default ?? '')
-  ))
+  imagePokemon = computed(() => this.pokemonService.getImagePokemonById(this.pokemon().id!))
 
   // logEffect = effect(() => {
   //   console.log('pokemon: ', this.pokemon())
   // })
+
   protected redirectToPokemon() {
-    this.router.navigate(['/pokemon', this.id()])
+    this.router.navigate(['/pokemon', this.pokemon().id!])
   }
 }

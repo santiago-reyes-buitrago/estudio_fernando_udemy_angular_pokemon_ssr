@@ -7,6 +7,7 @@ export interface ListPokemonInterface {
 }
 
 export interface Result {
+  id?: string
   name: string;
   url: string;
 }

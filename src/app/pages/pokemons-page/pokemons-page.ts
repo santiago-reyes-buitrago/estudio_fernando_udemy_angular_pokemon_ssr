@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
+import {AfterViewInit, Component, effect, inject, OnInit, signal} from '@angular/core';
 import {MetadataService} from '../../shared/services/metadata.service';
 import {PokemonListComponent} from '../../pokemons/components/pokemon-list/pokemon-list.component';
 import {
@@ -20,7 +20,8 @@ import {toSignal} from '@angular/core/rxjs-interop';
   styleUrl: './pokemons-page.css',
   standalone: true
 })
-export default class PokemonsPage implements OnInit{
+
+export default class PokemonsPage implements OnInit,AfterViewInit{
   private pokemonService = inject(PokemonsService)
   private metadataService = inject(MetadataService)
   private activatedRouter = inject(ActivatedRoute)
@@ -32,23 +33,22 @@ export default class PokemonsPage implements OnInit{
   // })
   pokemons = signal<Result[]>([]);
   query = toSignal<number>(this.activatedRouter.queryParamMap.pipe(map(params => params.get('page') ?? '1'),
-    map(page => isNaN(+page) ? 1 : +page)))
+    map(page => isNaN(+page) ? 1 : +page),tap(page => console.log(page))))
 
   ngOnInit(): void {
-    this.changeTitle()
-    this.metadataService.setMetadata([
-      {name: 'description', content: 'Pokemons Page'},
-      {name: 'og-title', content: 'Pokemons Page'},
-      {name: 'keywords', content: 'Pokemons,Page'}
-    ])
-    console.log(this.query())
     this.loadPokemon();
     // setTimeout(()=> {
     //   this.isLoading.set(false)
     // },5000)
   }
+  ngAfterViewInit(): void {
 
-
+    this.metadataService.setMetadata([
+      {name: 'description', content: 'Pokemons Page'},
+      {name: 'og-title', content: 'Pokemons Page'},
+      {name: 'keywords', content: 'Pokemons,Page'}
+    ])
+  }
   loadPokemon(page: number = 0){
     const pageLoad = this.query()! + page;
     this.pokemonService.loadPage(pageLoad).pipe(
@@ -60,9 +60,14 @@ export default class PokemonsPage implements OnInit{
   }
   // ngOnDestroy(): void {
   //   this.$appState.unsubscribe()
+
   // }
 
   private changeTitle() {
-    this.metadataService.setTitle(`Pokemons Page ${this.query()! + 1}`)
+    this.metadataService.setTitle(`Pokemons Page ${this.query()!}`)
   }
+
+  watchEffects = effect(() => {
+    this.changeTitle()
+  })
 }
