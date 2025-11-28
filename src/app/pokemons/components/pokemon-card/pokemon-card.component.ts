@@ -23,6 +23,6 @@ export class PokemonCardComponent {
   // })
 
   protected redirectToPokemon() {
-    this.router.navigate(['/pokemon', this.pokemon().id!])
+    this.router.navigate(['/pokemon', this.pokemon().name!])
   }
 }

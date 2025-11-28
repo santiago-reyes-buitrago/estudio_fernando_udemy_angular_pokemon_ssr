@@ -1,11 +1,11 @@
-import {AfterViewInit, Component, effect, inject, OnInit, signal} from '@angular/core';
+import {Component, effect, inject, OnInit, signal} from '@angular/core';
 import {MetadataService} from '../../shared/services/metadata.service';
 import {PokemonListComponent} from '../../pokemons/components/pokemon-list/pokemon-list.component';
 import {
   PokemonListSkeletonComponent
 } from '../../pokemons/components/pokemon-list-skeleton/pokemon-list-skeleton.component';
 import {PokemonsService} from '../../pokemons/services/pokemons.service';
-import {map, tap} from 'rxjs';
+import {map} from 'rxjs';
 import {Result} from '../../pokemons/interfaces';
 import {ActivatedRoute, Router} from '@angular/router';
 import {toSignal} from '@angular/core/rxjs-interop';
@@ -21,7 +21,7 @@ import {toSignal} from '@angular/core/rxjs-interop';
   standalone: true
 })
 
-export default class PokemonsPage implements OnInit,AfterViewInit{
+export default class PokemonsPage implements OnInit{
   private pokemonService = inject(PokemonsService)
   private metadataService = inject(MetadataService)
   private activatedRouter = inject(ActivatedRoute)
@@ -32,16 +32,10 @@ export default class PokemonsPage implements OnInit,AfterViewInit{
   //   console.log({stable})
   // })
   pokemons = signal<Result[]>([]);
-  query = toSignal<number>(this.activatedRouter.queryParamMap.pipe(map(params => params.get('page') ?? '1'),
-    map(page => isNaN(+page) ? 1 : +page),tap(page => console.log(page))))
+  query = toSignal<number>(this.activatedRouter.params.pipe(map(params => params['page'] ?? '1'),
+    map(page => isNaN(+page) ? 1 : +page)))
 
   ngOnInit(): void {
-    this.loadPokemon();
-    // setTimeout(()=> {
-    //   this.isLoading.set(false)
-    // },5000)
-  }
-  ngAfterViewInit(): void {
 
     this.metadataService.setMetadata([
       {name: 'description', content: 'Pokemons Page'},
@@ -49,14 +43,17 @@ export default class PokemonsPage implements OnInit,AfterViewInit{
       {name: 'keywords', content: 'Pokemons,Page'}
     ])
   }
+
   loadPokemon(page: number = 0){
     const pageLoad = this.query()! + page;
-    this.pokemonService.loadPage(pageLoad).pipe(
-      tap(() => this.router.navigate([],{queryParams: {page: pageLoad}, relativeTo: this.activatedRouter})),
-      tap(() => this.changeTitle())
-    ).subscribe({
+    this.pokemonService.loadPage(pageLoad).subscribe({
       next: this.pokemons.set,
     })
+  }
+
+  navigatePokemons(page: number = 0){
+    const pageLoad = this.query()! + page;
+    this.router.navigate(['pokemons','page',pageLoad])
   }
   // ngOnDestroy(): void {
   //   this.$appState.unsubscribe()
@@ -69,5 +66,6 @@ export default class PokemonsPage implements OnInit,AfterViewInit{
 
   watchEffects = effect(() => {
     this.changeTitle()
+    this.loadPokemon();
   })
 }

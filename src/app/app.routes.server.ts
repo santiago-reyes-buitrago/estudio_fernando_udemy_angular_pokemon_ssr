@@ -1,6 +1,6 @@
 import { RenderMode, ServerRoute } from '@angular/ssr';
 
-const {Server,Prerender} = RenderMode
+const {Server,Prerender,Client} = RenderMode
 
 export const serverRoutes: ServerRoute[] = [
   {
@@ -12,8 +12,8 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: Prerender
   },
   {
-    path: 'pokemons',
-    renderMode: Server
+    path: 'princing',
+    renderMode: Prerender
   },
   {
     path: '**',

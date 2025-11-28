@@ -9,6 +9,6 @@
 
 
 <div class="flex justify-between">
-  <button (click)="loadPokemon(-1)" [disabled]="(query()! < 2)" class="btn btn-primary mt-2">Anteriores</button>
-  <button (click)="loadPokemon(1)" class="btn btn-primary mt-2">Siguientes</button>
+  <button (click)="navigatePokemons(-1)" [disabled]="(query()! < 2)" class="btn btn-primary mt-2">Anteriores</button>
+  <button (click)="navigatePokemons(1)" class="btn btn-primary mt-2">Siguientes</button>
 </div>
